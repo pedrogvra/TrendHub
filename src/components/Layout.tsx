@@ -142,8 +142,8 @@ function MobileBottomNav() {
   const navigate = useNavigate();
   return (
     <nav className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t border-slate-200 bg-white/90 backdrop-blur-xl dark:bg-slate-950/90 dark:border-slate-800">
-      <div className="grid grid-cols-5 gap-1 px-2 py-2">
-        {navItems.slice(0, 5).map((item) => {
+      <div className="grid grid-cols-6 gap-1 px-1 py-2">
+        {navItems.slice(0, 6).map((item) => {
           const active =
             location.pathname === item.to ||
             (item.to !== "/feed" && location.pathname.startsWith(item.to));
@@ -152,7 +152,7 @@ function MobileBottomNav() {
               key={item.to}
               onClick={() => navigate(item.to)}
               className={cn(
-                "flex flex-col items-center justify-center gap-0.5 rounded-xl py-2 text-[11px] font-medium transition-colors",
+                "flex min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium transition-colors",
                 active
                   ? "text-blue-600 dark:text-cyan-300"
                   : "text-slate-500 dark:text-slate-400"
