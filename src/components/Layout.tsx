@@ -3,6 +3,7 @@
  * - Desktop: sidebar à esquerda + conteúdo central + rail à direita.
  * - Mobile: conteúdo central + bottom nav bar fixa.
  */
+import * as React from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -57,7 +58,6 @@ const navItems: NavItem[] = [
   { to: "/create", label: "Criar", icon: PlusCircle },
   { to: "/communities", label: "Comunidades", icon: Users },
   { to: "/chat", label: "Chat", icon: MessageCircle },
-  { to: "/profile", label: "Perfil", icon: UserIcon },
 ];
 
 function DesktopSidebar() {
@@ -121,7 +121,10 @@ function DesktopSidebar() {
 
 function MobileHeader() {
   const { theme, toggleTheme } = useTheme();
-  const { signOut } = useAuth();
+  const { profile, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = React.useState(false);
+
   return (
     <header className="lg:hidden sticky top-0 z-30 border-b border-slate-200 bg-white/80 backdrop-blur-xl dark:bg-slate-950/80 dark:border-slate-800 px-4 py-3 flex items-center justify-between">
       <Logo compact />
@@ -129,9 +132,48 @@ function MobileHeader() {
         <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Alternar tema">
           {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
-        <Button variant="ghost" size="icon" onClick={signOut} aria-label="Sair">
-          <LogOut className="h-5 w-5" />
-        </Button>
+        <div className="relative">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label="Abrir menu do perfil"
+          >
+            <Avatar
+              src={profile?.avatar_url}
+              alt={profile?.full_name || profile?.username}
+              fallback={profile?.username}
+              seed={profile?.username}
+              size="sm"
+              className="h-7 w-7 ring-0"
+            />
+          </Button>
+
+          {menuOpen && (
+            <div className="absolute right-0 top-full mt-2 w-40 rounded-xl border border-slate-200 bg-white p-2 shadow-lg dark:border-slate-800 dark:bg-slate-950">
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/profile");
+                }}
+                className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+              >
+                <UserIcon className="h-4 w-4" />
+                Perfil
+              </button>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  signOut();
+                }}
+                className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+              >
+                <LogOut className="h-4 w-4" />
+                Sair
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
@@ -143,7 +185,7 @@ function MobileBottomNav() {
   return (
     <nav className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t border-slate-200 bg-white/90 backdrop-blur-xl dark:bg-slate-950/90 dark:border-slate-800">
       <div className="flex items-center justify-between gap-1 px-1 py-2">
-        {navItems.slice(0, 6).map((item) => {
+        {navItems.slice(0, 5).map((item) => {
           const active =
             location.pathname === item.to ||
             (item.to !== "/feed" && location.pathname.startsWith(item.to));
