@@ -57,85 +57,12 @@ src/
 └── App.tsx          # Entry point das rotas
 ```
 
-## 🚀 Como rodar localmente
-
-### 1. Clone o repositório
-
-```bash
-git clone <url-do-repositorio>
-cd trendhub
-```
-
-### 2. Instale as dependências
-
-```bash
-npm install
-```
-
-### 3. Configure as variáveis de ambiente
-
-Crie um arquivo `.env` na raiz (existe `.env.example` como referência):
-
-```bash
-VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
-VITE_SUPABASE_ANON_KEY=SUA_ANON_KEY_AQUI
-```
-
-### 4. Configure o Supabase
-
-No dashboard do seu projeto Supabase:
-
-1. Vá em **SQL Editor** → **New query**.
-2. Cole todo o conteúdo do arquivo [`supabase-schema.sql`](./supabase-schema.sql) e execute.
-3. Ainda no **SQL Editor**, execute também os scripts:
-   - [`supabase-storage-buckets.sql`](./supabase-storage-buckets.sql)
-   - [`supabase-storage-policies.sql`](./supabase-storage-policies.sql)
-4. Em **Storage**, confirme que os buckets existem:
-   - `avatars` (público)
-   - `post-media` (público)
-5. Em **Authentication** → **Providers**, habilite **Email** (e desative "Confirm email" durante testes, se preferir).
-6. Em **Realtime**, habilite realtime para as tabelas `messages`, `likes` e `comments`.
-
-### 5. Inicie o servidor de desenvolvimento
-
-```bash
-npm run dev
-```
-
-Acesse [http://localhost:5173](http://localhost:5173).
-
-### 6. Build de produção
-
-```bash
-npm run build
-npm run preview
-```
-
-## 🚢 Deploy na Vercel
-
-1. Faça push para o GitHub.
-2. Em [vercel.com](https://vercel.com), importe o repositório.
-3. Nas configurações do projeto, adicione as **Environment Variables**:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-4. O build é automático (`npm run build`).
-
 ## 🔐 Segurança
 
 - Todas as tabelas possuem **Row Level Security (RLS)** habilitado.
 - Políticas de leitura/escrita restritas ao `auth.uid()`.
 - Uploads no Storage seguem as mesmas restrições (path inicia com `auth.uid()`).
 - Senhas são gerenciadas pelo Supabase Auth (bcrypt + salts).
-
-## 🧪 Estrutura do banco
-
-- `profiles` (1-1 com `auth.users`)
-- `communities` + `community_members`
-- `posts`, `likes`, `comments`
-- `follows`
-- `messages`
-
-Veja o DDL completo em [`supabase-schema.sql`](./supabase-schema.sql).
 
 ## 👤 Autoria
 
