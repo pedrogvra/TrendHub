@@ -142,7 +142,7 @@ function MobileBottomNav() {
   const navigate = useNavigate();
   return (
     <nav className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t border-slate-200 bg-white/90 backdrop-blur-xl dark:bg-slate-950/90 dark:border-slate-800">
-      <div className="grid grid-cols-6 gap-1 px-1 py-2">
+      <div className="flex items-center justify-between gap-1 px-1 py-2">
         {navItems.slice(0, 6).map((item) => {
           const active =
             location.pathname === item.to ||
@@ -152,7 +152,7 @@ function MobileBottomNav() {
               key={item.to}
               onClick={() => navigate(item.to)}
               className={cn(
-                "flex min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium transition-colors",
+                "flex flex-1 min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-2 text-[10px] font-medium whitespace-nowrap transition-colors",
                 active
                   ? "text-blue-600 dark:text-cyan-300"
                   : "text-slate-500 dark:text-slate-400"
